@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- EDIT HERE: Update the main browser title -->
+    <title>Haylie Crowe | UX Design Portfolio</title>
+    
+<script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* CSS styles remain here, no need to edit this section unless changing colors/fonts */
+        /* ... (CSS is omitted for brevity but is in the file) ... */
+        :root {
+            /* DARK MODE (Default) */
+            --c-bg-primary: #0d0d0d;
+            --c-bg-secondary: #181818;
+            --c-text-primary: #f5f5f5;
+            --c-text-secondary: #9ca3af; 
+            --c-border: #374151;
+
+            --c-accent: #C29F56; /* Rich Gold */
+            --c-highlight: #FFEFB8;
+            --c-header-bg: rgba(13, 13, 13, 0.85);
+            --c-card-bg: rgba(24, 24, 24, 0.7); 
+        }
+
+        .light-mode {
+            /* LIGHT MODE Overrides */
+            --c-bg-primary: #ffffff;
+            --c-bg-secondary: #f3f4f6;
+            --c-text-primary: #1f2937;
+            --c-text-secondary: #6b7280; 
+            --c-border: #e5e7eb;
+
+            --c-accent: #9a6d38; /* Darker Bronze for contrast on light BG */
+            --c-highlight: #374151; /* Darker highlight for text/icons */
+            --c-header-bg: rgba(255, 255, 255, 0.9);
+            --c-card-bg: rgba(255, 255, 255, 0.9);
+        }
+        
+        /* Apply variables to fundamental elements */
+        body {
+            background-color: var(--c-bg-primary);
+            color: var(--c-text-primary);
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+            transition: background-color 0.4s ease, color 0.4s ease; /* Theme transition */
+        }
+
+        /* Set default font to Inter, but use a serif fallback for luxury headings */
+        .luxury-heading {
+            font-family: 'Playfair Display', Georgia, serif; 
+            letter-spacing: 0.05em;
+        }
+
+        /* Subtle scroll reveal animation class */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Pre-title line draw effect */
+        .pre-title-effect {
+            display: inline-block;
+            position: relative;
+        }
+        .pre-title-effect::after {
+            content: '';
+            position: absolute;
+            bottom: -8px; 
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0%; 
+            height: 1px;
+            background-color: var(--c-accent);
+            opacity: 0;
+        }
+        
+        /* Animation keyframes for the line drawing and fading */
+        @keyframes drawLine {
+            0% { width: 0%; opacity: 0; }
+            20% { opacity: 1; }
+            80% { width: 100%; opacity: 1; }
+            100% { width: 100%; opacity: 0; }
+        }
+        
+        .pre-title-effect.active::after {
+            animation: drawLine 2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards 0.5s; 
+        }
+        
+        /* --- NEW: HERO HEADING UNDERLINE EFFECT --- */
+        .hero-underline {
+            position: relative; /* Needed for ::after positioning */
+            display: inline-block; /* Or block, depending on desired width */
+        }
+        .hero-underline::after {
+            content: '';
+            position: absolute;
+            bottom: -15px; /* Adjust distance below text */
+            left: 0;
+            width: 0%; /* Start hidden */
+            height: 2px; /* Thickness of the line */
+            background-color: var(--c-accent);
+            transition: background-color 0.4s ease; /* For theme change */
+            animation: expandUnderline 1.5s ease-out forwards 1.2s; /* 1.2s delay to appear after text */
+        }
+
+        @keyframes expandUnderline {
+            0% { width: 0%; opacity: 0; }
+            50% { opacity: 1; }
+            100% { width: 100%; opacity: 1; }
+        }
+        /* ------------------------------------------- */
+
+
+        /* Header Styling */
+        header {
+            background-color: var(--c-header-bg);
+            border-bottom: 1px solid var(--c-border);
+        }
+
+        /* Section Backgrounds */
+        .bg-secondary-bg-theme {
+            background-color: var(--c-bg-secondary);
+            transition: background-color 0.4s ease;
+        }
+
+        /* Custom Card Hover Effect for Projects */
+        .project-card {
+            background-color: var(--c-card-bg);
+            border: 1px solid transparent; /* Ensure border is part of transition */
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.4s ease, border-color 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .project-card:hover {
+            transform: translateY(-5px);
+            /* Soft, glowing spotlight effect from the gold accent */
+            box-shadow: 0 10px 40px rgba(194, 159, 86, 0.15), 0 0 10px rgba(0, 0, 0, 0.1); 
+        }
+
+        .project-card:hover {
+            border-color: var(--c-accent); /* Gold border on hover */
+        }
+
+        /* Custom Button Style */
+        .accent-button {
+            background-color: transparent;
+            border: 1px solid var(--c-accent);
+            color: var(--c-accent);
+            transition: background-color 0.3s ease, color 0.3s ease, transform 0.1s ease, border-color 0.4s ease;
+        }
+
+        .accent-button:hover {
+            background-color: var(--c-accent);
+            color: var(--c-bg-primary); /* Use primary BG color for text on hover */
+            transform: scale(1.03);
+        }
+        
+        /* Form Inputs */
+        .form-input {
+            background-color: var(--c-bg-secondary);
+            color: var(--c-text-primary);
+            border-bottom: 1px solid var(--c-border);
+            transition: background-color 0.4s ease, border-color 0.4s ease, color 0.4s ease;
+        }
+        .form-input:focus {
+             border-color: var(--c-accent);
+        }
+        
+        /* Specific style for the metallic 'Exceptional' word */
+        .exceptional-pop {
+            /* Even darker gold gradient */
+            background-image: linear-gradient(to top, #7C5A1F, #A57C2F, #D4AF37, #FFFDD0); /* Deeper base, bright highlight */
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 600; 
+            padding: 0 2px;
+            
+            /* Enhanced 3D look for deeper effect */
+            text-shadow: 
+                0 0 5px rgba(255, 223, 0, 0.3),            /* Light glow */
+                0 1px 0 rgba(255, 255, 255, 0.5),          /* Top highlight */
+                0 3px 0 rgba(100, 70, 0, 0.5),             /* Darker mid-tone for contrast */
+                0 5px 0 var(--c-accent),                   /* Increased base offset (5px) */
+                0 6px 2px rgba(0, 0, 0, 0.3),              /* Increased soft dark edge */
+                0 12px 20px rgba(0, 0, 0, 0.4);            /* Deeper, wider drop shadow */
+        }
+        
+        /* Scroll Progress Bar Style */
+        #scroll-progress {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 2px;
+            background-color: var(--c-accent);
+            width: 0%;
+            transition: width 0.1s linear, background-color 0.4s ease; 
+        }
+        
+        /* Footer dimming/fading style (Now uses theme colors) */
+        footer {
+            border-top: 1px solid var(--c-border);
+            transition: border-color 0.4s ease;
+        }
+        .footer-text {
+            color: var(--c-text-secondary);
+            transition: color 0.4s ease;
+        }
+        .footer-link {
+            transition: color 0.3s ease;
+            color: var(--c-text-secondary); /* Initially dimmed */
+        }
+        .footer-link:hover {
+            color: var(--c-accent); 
+        }
+
+        /* Placeholder styles adjusted to use variables */
+        .placeholder {
+            background-color: var(--c-bg-secondary);
+            border-color: var(--c-accent);
+            color: var(--c-text-secondary);
+            transition: background-color 0.4s ease, border-color 0.4s ease, color 0.4s ease;
+        }
+
+        /* Styling for the Methodology Icons/Steps and Testimonials Cards */
+        .method-step {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            background-color: var(--c-card-bg);
+            border: 1px solid var(--c-border);
+        }
+        .method-step:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2); 
+            border-color: var(--c-accent);
+        }
+        .method-icon {
+            color: var(--c-accent);
+        }
+
+    </style>
+    <!-- Font Awesome for Sun/Moon Icons and Methodology icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+
+    <!-- Header Navigation --><header class="sticky top-0 z-50 backdrop-blur-sm shadow-xl">
+        <nav class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <!-- EDIT HERE: Customize your initials -->
+            <a href="#hero" class="text-2xl font-bold luxury-heading tracking-widest hover:opacity-80 transition duration-300" style="color: var(--c-text-primary);">
+                HC
+            </a>
+            <div class="flex items-center space-x-6 md:space-x-8 text-sm uppercase tracking-wider">
+                <!-- Navigation links use standard anchors; sections are below -->
+                <a href="#about" class="hover:text-white transition duration-300" style="color: var(--c-text-secondary);">About</a>
+                <a href="#testimonials" class="hover:text-white transition duration-300" style="color: var(--c-text-secondary);">Endorsements</a>
+                <a href="#methodology" class="hover:text-white transition duration-300" style="color: var(--c-text-secondary);">Methodology</a>
+                <a href="#projects" class="hover:text-white transition duration-300" style="color: var(--c-text-secondary);">Projects</a>
+                <a href="#contact" class="hover:text-white transition duration-300" style="color: var(--c-text-secondary);">Contact</a>
+                
+                <!-- THEME TOGGLE BUTTON -->
+                <button id="themeToggle" class="w-8 h-8 flex items-center justify-center rounded-full text-lg transition duration-300 hover:bg-opacity-20" style="color: var(--c-accent);">
+                    <i class="fas fa-sun" id="themeIcon"></i>
+                </button>
+            </div>
+        </nav>
+        <!-- SCROLL PROGRESS INDICATOR -->
+        <div id="scroll-progress"></div> 
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section id="hero" class="min-h-screen flex items-center justify-center text-center p-8 relative overflow-hidden">
+            <!-- Canvas for Floating Particles -->
+            <canvas id="particleCanvas" class="absolute inset-0 z-0"></canvas>
+
+            <div class="max-w-4xl space-y-8 reveal z-10">
+                <p class="text-lg uppercase tracking-[0.3em] luxury-heading mb-4 reveal pre-title-effect" style="color: var(--c-text-secondary); transition-delay: 0.1s;">
+                    <!-- EDIT HERE: Customize the pre-title motto -->
+                    The Architecture of Experience
+                </p>
+                
+                <h1 class="text-7xl md:text-8xl lg:text-9xl font-extralight luxury-heading leading-tight tracking-tighter hero-underline">
+                    <!-- EDIT HERE: Customize the main hero message -->
+                    Crafting <span class="text-transparent exceptional-pop">Exceptional</span> Digital Experiences
+                </h1>
+                <p class="text-xl max-w-2xl mx-auto" style="color: var(--c-text-secondary);">
+                    <!-- EDIT HERE: Customize your name and graduating status/title -->
+                    Haylie Crowe is a graduating UX Designer ready to launch a career in exceptional experience architecture, specializing in intuitive, high-impact solutions.
+                </p>
+                <div class="pt-4">
+                    <a href="#projects" class="inline-block px-8 py-3 text-lg font-medium rounded-lg accent-button uppercase tracking-widest">
+                        View Select Work
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="py-32 px-6 bg-secondary-bg-theme">
+            <div class="max-w-5xl mx-auto grid md:grid-cols-3 gap-12 items-start">
+                <div class="md:col-span-1 reveal">
+                    <!-- IMAGE INSERTION: Replaced placeholder with the uploaded image -->
+                    <div class="w-48 h-48 rounded-full border-2 border-accent mx-auto md:mx-0 flex items-center justify-center overflow-hidden">
+                        <img src="IMG_8934.JPG" alt="Haylie Crowe Profile Picture" class="w-full h-full object-cover">
+                    </div>
+                </div>
+                <div class="md:col-span-2 space-y-8 reveal" style="transition-delay: 0.1s;">
+                    <h2 class="text-5xl luxury-heading text-center md:text-left">
+                        The Designer Behind the Pixel
+                    </h2>
+                    <!-- EDIT HERE: Customize your main professional bio (Paragraph 1) -->
+                    <p class="text-lg leading-relaxed max-w-3xl" style="color: var(--c-text-secondary);">
+                        My practice is rooted in meticulous research, structural integrity, and a relentless pursuit of aesthetic perfection. I believe that true exclusivity in design is achieved when utility and beauty become indistinguishable. Having just completed my foundational studies, I am proficient in transforming complex user problems into elegant, intuitive interfaces that drive measurable value.
+                    </p>
+                    <!-- EDIT HERE: Customize your main professional bio (Paragraph 2) -->
+                    <p class="text-lg leading-relaxed max-w-3xl" style="color: var(--c-text-secondary);">
+                        I approach every project as an investment in the user's time and attention, ensuring that the final product is not merely used, but *cherished*.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testimonials Section -->
+        <section id="testimonials" class="py-32 px-6">
+            <div class="max-w-7xl mx-auto text-center">
+                <h2 class="text-5xl luxury-heading mb-6 reveal">
+                    Endorsements & Mentorship
+                </h2>
+                <p class="text-xl max-w-3xl mx-auto mb-16 reveal" style="color: var(--c-text-secondary);">
+                    Insights from professors, internship mentors, and project collaborators on my approach and potential.
+                </p>
+
+                <div class="grid md:grid-cols-2 gap-10">
+                    
+                    <!-- Testimonial 1 -->
+                    <div class="p-8 rounded-xl method-step reveal">
+                        <i class="fas fa-quote-left fa-2x method-icon mb-4"></i>
+                        <p class="text-lg italic" style="color: var(--c-text-primary);">
+                            <!-- EDIT HERE: Update Testimonial Quote 1 -->
+                            "Haylie possesses a rare maturity in her design thinking, moving seamlessly from empathy to high-fidelity execution. Her final capstone project was easily among the top 5% I’ve reviewed in my career."
+                        </p>
+                        <p class="mt-4 text-sm font-semibold" style="color: var(--c-accent);">
+                            <!-- EDIT HERE: Update Testimonial Name 1 -->
+                            Dr. Eleanor Vance
+                        </p>
+                        <p class="text-xs" style="color: var(--c-text-secondary);">
+                            <!-- EDIT HERE: Update Testimonial Title 1 -->
+                            Director of UX Programs, State University
+                        </p>
+                    </div>
+
+                    <!-- Testimonial 2 -->
+                    <div class="p-8 rounded-xl method-step reveal" style="transition-delay: 0.1s;">
+                        <i class="fas fa-quote-left fa-2x method-icon mb-4"></i>
+                        <p class="text-lg italic" style="color: var(--c-text-primary);">
+                            <!-- EDIT HERE: Update Testimonial Quote 2 -->
+                            "During her internship, Haylie quickly grasped the complexity of our enterprise platform. She doesn't just design screens; she designs solutions that are structurally sound and visually refined."
+                        </p>
+                        <p class="mt-4 text-sm font-semibold" style="color: var(--c-accent);">
+                            <!-- EDIT HERE: Update Testimonial Name 2 -->
+                            Marcus Chen
+                        </p>
+                        <p class="text-xs" style="color: var(--c-text-secondary);">
+                            <!-- EDIT HERE: Update Testimonial Title 2 -->
+                            Lead Product Designer, Quantum Solutions Inc.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Methodology Section -->
+        <section id="methodology" class="py-32 px-6 bg-secondary-bg-theme">
+            <div class="max-w-7xl mx-auto text-center">
+                <h2 class="text-5xl luxury-heading mb-6 reveal">
+                    A Three-Part Design Mandate
+                </h2>
+                <!-- EDIT HERE: Update the methodology subtitle if needed -->
+                <p class="text-xl max-w-3xl mx-auto mb-16 reveal" style="color: var(--c-text-secondary);">
+                    Every project is governed by a strategic process, ensuring predictable excellence from concept to deployment.
+                </p>
+
+                <div class="grid md:grid-cols-3 gap-10">
+                    
+                    <!-- Step 1: Strategy -->
+                    <div class="method-step p-8 rounded-xl reveal">
+                        <!-- EDIT HERE: Update the description for your Strategy phase -->
+                        <i class="fas fa-sitemap fa-3x method-icon mb-4"></i>
+                        <h3 class="text-3xl luxury-heading mb-4">I. Strategy</h3>
+                        <p class="text-base" style="color: var(--c-text-secondary);">
+                            Deep dive into market analysis, stakeholder goals, and user research (interviews, journey mapping) to define the problem space and establish core metrics for success.
+                        </p>
+                    </div>
+
+                    <!-- Step 2: Execution -->
+                    <div class="method-step p-8 rounded-xl reveal" style="transition-delay: 0.1s;">
+                        <!-- EDIT HERE: Update the description for your Execution phase -->
+                        <i class="fas fa-drafting-compass fa-3x method-icon mb-4"></i>
+                        <h3 class="text-3xl luxury-heading mb-4">II. Execution</h3>
+                        <p class="text-base" style="color: var(--c-text-secondary);">
+                            Iterative design, high-fidelity prototyping in Figma/Sketch, design system application, and close collaboration with engineering for feasibility and perfect implementation.
+                        </p>
+                    </div>
+
+                    <!-- Step 3: Validation -->
+                    <div class="method-step p-8 rounded-xl reveal" style="transition-delay: 0.2s;">
+                        <!-- EDIT HERE: Update the description for your Validation phase -->
+                        <i class="fas fa-chart-line fa-3x method-icon mb-4"></i>
+                        <h3 class="text-3xl luxury-heading mb-4">III. Validation</h3>
+                        <p class="text-base" style="color: var(--c-text-secondary);">
+                            Rigorous usability testing, A/B experimentation, and post-launch metric analysis to ensure the final product delivers the defined business and user value.
+                        </p>
+                    </div>
+                </div>
+                
+                <p class="text-lg mt-16 max-w-3xl mx-auto reveal" style="color: var(--c-text-secondary);">
+                    <!-- EDIT HERE: List your core design tools -->
+                    **Core Tools:** Figma, Sketch, Adobe XD, UserTesting, Hotjar, HTML/CSS/JavaScript, React Component Libraries.
+                </p>
+            </div>
+        </section>
+
+        <!-- Projects Section (Case Studies) -->
+        <section id="projects" class="py-32 px-6">
+            <div class="max-w-7xl mx-auto">
+                <h2 class="text-5xl luxury-heading mb-16 text-center reveal">
+                    Signature Works
+                </h2>
+                
+                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-12">
+
+                    <!-- Project 1 -->
+                    <article class="project-card p-6 rounded-xl reveal">
+                        <!-- NOTE: If you replace the placeholder, this is where your project image/mockup goes -->
+                        <div class="mb-4 aspect-video rounded-lg flex items-center justify-center placeholder" style="background-color: var(--c-bg-secondary);">
+                            <span class="luxury-heading">Placeholder: Project Alpha</span>
+                        </div>
+                        <!-- EDIT HERE: Project 1 Title -->
+                        <h3 class="text-3xl luxury-heading mt-4" style="color: var(--c-text-primary);">Project Meridian</h3>
+                        <!-- EDIT HERE: Project 1 Short Description -->
+                        <p class="mt-2 text-sm" style="color: var(--c-text-secondary);">
+                            A complete platform redesign for a global financial data service, focusing on dashboard clarity and information architecture.
+                        </p>
+                        <!-- EDIT HERE: Project 1 Tags -->
+                        <span class="inline-block mt-4 text-xs font-medium uppercase tracking-wider" style="color: var(--c-text-secondary);">
+                            UI/UX Strategy & Enterprise Design
+                        </span>
+                        <!-- EDIT HERE: Project 1 Link (to external case study or PDF) -->
+                        <a href="#" class="block mt-4 text-sm hover:underline" style="color: var(--c-accent);">Read Full Case Study &rarr;</a>
+                    </article>
+
+                    <!-- Project 2 -->
+                    <article class="project-card p-6 rounded-xl reveal" style="transition-delay: 0.1s;">
+                        <!-- NOTE: If you replace the placeholder, this is where your project image/mockup goes -->
+                        <div class="mb-4 aspect-video rounded-lg flex items-center justify-center placeholder" style="background-color: var(--c-bg-secondary);">
+                            <span class="luxury-heading">Placeholder: Project Beta</span>
+                        </div>
+                        <!-- EDIT HERE: Project 2 Title -->
+                        <h3 class="text-3xl luxury-heading mt-4" style="color: var(--c-text-primary);">The Echelon App</h3>
+                        <!-- EDIT HERE: Project 2 Short Description -->
+                        <p class="mt-2 text-sm" style="color: var(--c-text-secondary);">
+                            Developing the mobile experience for a high-end travel and concierge service, emphasizing effortless booking and personalized curation.
+                        </p>
+                        <!-- EDIT HERE: Project 2 Tags -->
+                        <span class="inline-block mt-4 text-xs font-medium uppercase tracking-wider" style="color: var(--c-text-secondary);">
+                            Mobile UX & Interaction Design
+                        </span>
+                        <!-- EDIT HERE: Project 2 Link (to external case study or PDF) -->
+                        <a href="#" class="block mt-4 text-sm hover:underline" style="color: var(--c-accent);">Read Full Case Study &rarr;</a>
+                    </article>
+
+                    <!-- Project 3 -->
+                    <article class="project-card p-6 rounded-xl reveal" style="transition-delay: 0.2s;">
+                        <!-- NOTE: If you replace the placeholder, this is where your project image/mockup goes -->
+                        <div class="mb-4 aspect-video rounded-lg flex items-center justify-center placeholder" style="background-color: var(--c-bg-secondary);">
+                            <span class="luxury-heading">Placeholder: Project Gamma</span>
+                        </div>
+                        <!-- EDIT HERE: Project 3 Title -->
+                        <h3 class="text-3xl luxury-heading mt-4" style="color: var(--c-text-primary);">Quantum Commerce</h3>
+                        <!-- EDIT HERE: Project 3 Short Description -->
+                        <p class="mt-2 text-sm" style="color: var(--c-text-secondary);">
+                            Creating a seamless, zero-friction checkout flow and immersive product visualization for a bespoke e-commerce platform.
+                        </p>
+                        <!-- EDIT HERE: Project 3 Tags -->
+                        <span class="inline-block mt-4 text-xs font-medium uppercase tracking-wider" style="color: var(--c-text-secondary);">
+                            E-Commerce Optimization & Prototyping
+                        </span>
+                        <!-- EDIT HERE: Project 3 Link (to external case study or PDF) -->
+                        <a href="#" class="block mt-4 text-sm hover:underline" style="color: var(--c-accent);">Read Full Case Study &rarr;</a>
+                    </article>
+
+                    <!-- Project 4 (NEW) -->
+                    <article class="project-card p-6 rounded-xl reveal" style="transition-delay: 0.3s;">
+                        <!-- NOTE: If you replace the placeholder, this is where your project image/mockup goes -->
+                        <div class="mb-4 aspect-video rounded-lg flex items-center justify-center placeholder" style="background-color: var(--c-bg-secondary);">
+                            <span class="luxury-heading">Placeholder: Project Delta</span>
+                        </div>
+                        <!-- EDIT HERE: Project 4 Title -->
+                        <h3 class="text-3xl luxury-heading mt-4" style="color: var(--c-text-primary);">Sentinel Dashboard</h3>
+                        <!-- EDIT HERE: Project 4 Short Description -->
+                        <p class="mt-2 text-sm" style="color: var(--c-text-secondary);">
+                            Designing a secure, real-time analytics dashboard for C-suite executives, prioritizing data visualization clarity.
+                        </p>
+                        <!-- EDIT HERE: Project 4 Tags -->
+                        <span class="inline-block mt-4 text-xs font-medium uppercase tracking-wider" style="color: var(--c-text-secondary);">
+                            Data Visualization & SaaS UI
+                        </span>
+                        <!-- EDIT HERE: Project 4 Link (to external case study or PDF) -->
+                        <a href="#" class="block mt-4 text-sm hover:underline" style="color: var(--c-accent);">Read Full Case Study &rarr;</a>
+                    </article>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- RESUME SECTION -->
+        <section id="resume" class="py-32 px-6 bg-secondary-bg-theme">
+            <div class="max-w-4xl mx-auto text-center reveal">
+                <h2 class="text-5xl luxury-heading mb-6">
+                    Resume & Credentials
+                </h2>
+                <!-- EDIT HERE: Customize the resume section description -->
+                <p class="text-xl max-w-3xl mx-auto mb-8" style="color: var(--c-text-secondary);">
+                    For a comprehensive overview of my professional timeline, methodology, and technical proficiencies, please access my full resume. It details my commitment to strategic UX delivery.
+                </p>
+                <div class="pt-4">
+                    <!-- EDIT HERE: Update the URL/file path to your actual resume PDF -->
+                    <a href="/cv-placeholder.pdf" target="_blank" class="inline-block px-8 py-3 text-lg font-medium rounded-lg accent-button uppercase tracking-widest">
+                        Download Full Resume (PDF)
+                    </a>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- Contact Section -->
+        <section id="contact" class="py-32 px-6">
+            <div class="max-w-4xl mx-auto text-center reveal">
+                <h2 class="text-5xl luxury-heading mb-6">
+                    Let's Discuss Your Vision
+                </h2>
+                <!-- EDIT HERE: Customize the contact call-to-action message -->
+                <p class="text-xl max-w-3xl mx-auto mb-10" style="color: var(--c-text-secondary);">
+                    I am actively seeking full-time roles and opportunities to apply strategic UX design. If you have an exciting project or position, I invite you to connect.
+                </p>
+                
+                <form id="contactForm" class="space-y-6 max-w-md mx-auto">
+                    <!-- Form fields: These don't need customization, they collect input -->
+                    <input type="text" placeholder="Your Name" required
+                           class="w-full p-4 focus:ring-0 rounded-lg transition duration-300 form-input">
+                    <input type="email" placeholder="Your Email Address" required
+                           class="w-full p-4 focus:ring-0 rounded-lg transition duration-300 form-input">
+                    <textarea placeholder="Tell me about your project" required rows="5"
+                              class="w-full p-4 focus:ring-0 rounded-lg transition duration-300 form-input"></textarea>
+                    
+                    <button type="submit" class="w-full px-8 py-4 text-lg font-medium rounded-lg accent-button uppercase tracking-widest mt-6">
+                        Send Confidential Inquiry
+                    </button>
+                    <!-- NOTE: The form logic (in the <script> below) only shows a confirmation message, it does not actually send email. You would need a backend service for that. -->
+                    <div id="formMessage" class="mt-4 h-6" style="color: var(--c-text-secondary);"></div>
+                </form>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="py-12 px-6">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center text-center md:text-left text-sm transition duration-300">
+            <!-- EDIT HERE: Update copyright year/name -->
+            <p class="footer-text">&copy; 2025 Haylie Crowe. All Rights Reserved.</p>
+            <div class="space-x-4 mt-4 md:mt-0">
+                <!-- EDIT HERE: Update social media links -->
+                <a href="#" class="footer-link">LinkedIn</a>
+                <a href="#" class="footer-link">Dribbble</a>
+                <a href="#" class="footer-link">Medium</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript for Interactions, Scroll Reveal, Particles, and New Effects -->
+    <script>
+        // Use an IIFE (Immediately Invoked Function Expression) to scope the variables
+        (function() {
+            /**
+             * GLOBAL ELEMENTS
+             */
+            const scrollProgress = document.getElementById('scroll-progress');
+            const footerContent = document.querySelector('footer div');
+            const footerLinks = document.querySelectorAll('footer .footer-link');
+            const themeToggle = document.getElementById('themeToggle');
+            const themeIcon = document.getElementById('themeIcon');
+            const body = document.body;
+
+            /**
+             * --- THEME SWITCHING LOGIC ---
+             * (No editing needed here)
+             */
+            function setIcon(isLight) {
+                if (themeIcon) {
+                    // Update icon based on the current mode (sun for dark mode, moon for light mode)
+                    themeIcon.classList.toggle('fa-sun', !isLight);
+                    themeIcon.classList.toggle('fa-moon', isLight);
+                }
+            }
+
+            function loadTheme() {
+                const storedTheme = localStorage.getItem('theme');
+                // Check if user has a preference, otherwise check system, then default to dark
+                if (storedTheme === 'light') {
+                    body.classList.add('light-mode');
+                    setIcon(true);
+                } else if (storedTheme === 'dark') {
+                    body.classList.remove('light-mode');
+                    setIcon(false);
+                } else {
+                    // Check system preference if no stored theme
+                    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
+                        body.classList.add('light-mode');
+                        setIcon(true);
+                    } else {
+                        // Default to dark mode
+                        body.classList.remove('light-mode');
+                        setIcon(false);
+                    }
+                }
+            }
+            
+            function toggleTheme() {
+                const isLight = body.classList.toggle('light-mode');
+                
+                // Save preference to localStorage
+                localStorage.setItem('theme', isLight ? 'light' : 'dark');
+                setIcon(isLight);
+            }
+
+            // Initialize theme on load
+            loadTheme();
+            if (themeToggle) {
+                themeToggle.addEventListener('click', toggleTheme);
+            }
+            
+            /**
+             * Scroll Reveal Logic for the 'exclusive' fade-in effect
+             * (No editing needed here)
+             */
+            const revealElements = document.querySelectorAll('.reveal');
+
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.1 
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        // Adds 'active' class which triggers CSS opacity/transform and the line animation
+                        entry.target.classList.add('active'); 
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            revealElements.forEach(el => {
+                observer.observe(el);
+            });
+
+            /**
+             * 1. Scroll Progress Bar Logic
+             * (No editing needed here)
+             */
+            function updateScrollProgress() {
+                if (!scrollProgress) return;
+                
+                const totalHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+                const scrolled = window.scrollY;
+                const progress = Math.min(100, Math.max(0, (scrolled / totalHeight) * 100));
+                
+                scrollProgress.style.width = progress + '%';
+            }
+            window.addEventListener('scroll', updateScrollProgress);
+            updateScrollProgress();
+
+            /**
+             * 2. Footer Interaction Logic (Dimming/Brightening)
+             * (No editing needed here)
+             */
+            function setupFooterInteraction() {
+                if (!footerContent) return;
+
+                // Event listeners for hover/mouse interaction
+                footerContent.parentElement.addEventListener('mouseenter', () => {
+                    footerContent.querySelectorAll('.footer-text, .footer-link').forEach(el => {
+                        el.style.color = 'var(--c-accent)'; // Brighten to accent color
+                    });
+                });
+
+                footerContent.parentElement.addEventListener('mouseleave', () => {
+                    setTimeout(() => {
+                         if (!footerContent.contains(document.activeElement)) {
+                            // Reset back to secondary text color
+                            footerContent.querySelectorAll('.footer-text, .footer-link').forEach(el => {
+                                el.style.color = 'var(--c-text-secondary)'; 
+                            });
+                            // Special case for footer-text to handle the base color
+                            footerContent.querySelector('.footer-text').style.color = 'var(--c-text-secondary)';
+                        }
+                    }, 50);
+                });
+                
+                // For touch/accessibility, ensure focus brightens the whole footer
+                footerLinks.forEach(link => {
+                    link.addEventListener('focus', () => {
+                         footerContent.querySelectorAll('.footer-text, .footer-link').forEach(el => {
+                            el.style.color = 'var(--c-accent)';
+                        });
+                    });
+                    link.addEventListener('blur', () => {
+                        setTimeout(() => {
+                            if (!footerContent.contains(document.activeElement)) {
+                                footerContent.querySelectorAll('.footer-text, .footer-link').forEach(el => {
+                                    el.style.color = 'var(--c-text-secondary)';
+                                });
+                            }
+                        }, 50);
+                    });
+                });
+            }
+            
+            setupFooterInteraction();
+
+            /**
+             * Particle Animation Logic 
+             * (No editing needed here)
+             */
+            const canvas = document.getElementById('particleCanvas');
+            if (canvas) { 
+                const ctx = canvas.getContext('2d');
+                let particles = [];
+                const particleCount = 30; 
+                let lastTime = 0; 
+
+                function resizeCanvas() {
+                    canvas.width = canvas.offsetWidth;
+                    canvas.height = canvas.offsetHeight;
+                    initParticles();
+                }
+                
+                resizeCanvas();
+                window.addEventListener('resize', resizeCanvas);
+
+                function Particle(x, y) {
+                    this.x = x;
+                    this.y = y;
+                    this.size = Math.random() * 0.4 + 0.2; 
+                    this.timeOffset = Math.random() * Math.PI * 2; 
+                    
+                    this.getParticleColor = function() {
+                         const isLightMode = body.classList.contains('light-mode');
+                         // Gold tint, very faint opacity (0.05 to 0.15)
+                         const hue = isLightMode ? 40 : 45; 
+                         const saturation = isLightMode ? 50 : 60;
+                         const lightness = isLightMode ? 60 : 75;
+                         const opacity = Math.random() * 0.1 + 0.05;
+
+                         return 'hsla(' + hue + ', ' + saturation + '%, ' + lightness + '%, ' + opacity + ')'; 
+                    };
+                    this.color = this.getParticleColor();
+                }
+
+                Particle.prototype.update = function(time) {
+                    this.x += Math.sin(time * 0.0001 + this.timeOffset) * 0.2; 
+                    this.y += Math.cos(time * 0.00015 + this.timeOffset) * 0.1; 
+
+                    if (this.x > canvas.width * 1.5 || this.x < -canvas.width * 0.5 ||
+                        this.y > canvas.height * 1.5 || this.y < -canvas.height * 0.5) {
+                        
+                        if (Math.random() < 0.5) {
+                            this.x = Math.random() < 0.5 ? -10 : canvas.width + 10;
+                            this.y = Math.random() * canvas.height;
+                        } else {
+                            this.x = Math.random() * canvas.width;
+                            this.y = Math.random() < 0.5 ? -10 : canvas.height + 10;
+                        }
+                        this.color = this.getParticleColor(); 
+                    }
+                };
+
+                Particle.prototype.draw = function() {
+                    ctx.fillStyle = this.color;
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                    ctx.fill();
+                };
+
+                function initParticles() {
+                    particles = [];
+                    for (let i = 0; i < particleCount; i++) {
+                        const x = Math.random() * canvas.width;
+                        const y = Math.random() * canvas.height;
+                        particles.push(new Particle(x, y));
+                    }
+                }
+                
+                function animateParticles(timestamp) {
+                    if (!lastTime) lastTime = timestamp; 
+
+                    const bgColor = getComputedStyle(document.body).getPropertyValue('--c-bg-primary').trim();
+                    ctx.fillStyle = bgColor; 
+                    ctx.fillRect(0, 0, canvas.width, canvas.height);
+                    
+                    for (let i = 0; i < particles.length; i++) {
+                        particles[i].update(timestamp); 
+                        particles[i].draw();
+                    }
+                    
+                    requestAnimationFrame(animateParticles);
+                }
+                
+                animateParticles();
+            }
+
+            /**
+             * Contact Form Handling 
+             * (NOTE: This only displays a confirmation message, it does NOT send email.)
+             */
+            const contactForm = document.getElementById('contactForm');
+            const formMessage = document.getElementById('formMessage');
+
+            contactForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const button = this.querySelector('button[type="submit"]');
+                const originalText = button.textContent;
+                
+                button.textContent = 'Sending...';
+                button.disabled = true;
+
+                setTimeout(() => {
+                    formMessage.style.color = 'var(--c-accent)';
+                    formMessage.textContent = 'Thank you. Your inquiry has been received and will be reviewed shortly.';
+                    
+                    contactForm.reset();
+                    button.textContent = originalText;
+                    button.disabled = false;
+                }, 1500);
+
+            });
+        })();
+    </script>
+
+</body>
+</html>
